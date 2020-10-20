@@ -7,15 +7,6 @@
 #define MAX_LINES 255
 #define MAX_LINE_LENGTH 81
 
-/*
- * TODO load each line of the document in as a char array, and get user input
- * one key at a time, then step along the char array, check if the char is
- * correct, and color it accordingly. After hitting return, keep score.
- */
-
-
-
-
 int main(int argc, char *argv[])
 {
         char buf[MAX_LINES][MAX_LINE_LENGTH];
@@ -33,11 +24,11 @@ int main(int argc, char *argv[])
         }
         fclose(fp);
 
-        initscr(); 			/* Start curses mode 		*/
-	raw(); 				/* Line buffering disabled	*/
-	keypad(stdscr, TRUE); 		/* We get F1, F2 etc..		*/
+        initscr();
+	raw();
+	keypad(stdscr, TRUE);
         noecho();
-        start_color();                  /* Start color                  */
+        start_color();
         init_pair(1, COLOR_RED, COLOR_BLACK);
 
         bad = 0;
