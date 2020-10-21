@@ -10,7 +10,7 @@
 int main(int argc, char *argv[])
 {
         char buf[MAX_LINES][MAX_LINE_LENGTH];
-        int lc, bad, good;
+        int lc, bad, good, space;
         FILE *fp;
         char *test;
         test = (char *) malloc(81);
@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
 
         bad = 0;
         good = 0;
+        space = 0;
         for(int i = 0; i < lc; i++) {
                 printw("%s\n", buf[i]);
                 int ch;
@@ -48,7 +49,10 @@ int main(int argc, char *argv[])
                         }
                         else if (ch == buf[i][j]) {
                                 addch(ch);
-                                good++;
+                                if (ch != ' ')
+                                        good++;
+                                else
+                                        space++;
                         }
                         else {
                                 attron(COLOR_PAIR(1));
@@ -68,6 +72,6 @@ int main(int argc, char *argv[])
 
 end:
         endwin();
-        printf("%d mistakes, %d total characters\n", bad, good - bad);
+        printf("%d mistakes, %d total characters, %d total (normalized, 5 character) words, %d total spaces\n", bad, good - bad, (good - bad)/5, space);
         return 0;
 }
