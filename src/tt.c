@@ -7,6 +7,16 @@
 #define MAX_LINES 255
 #define MAX_LINE_LENGTH 81
 
+/*
+ * TODO
+ * manually build a string one char at a time, checking along the way as
+ *      we are currently doing.
+ * strcmp input string and string being typed and hang until they are the same.
+ * record the time to input each string. check number of words by stepping thru
+ *      each string manually.
+ * show stats on screen while typing.
+ */
+
 int main(int argc, char *argv[])
 {
         char buf[MAX_LINES][MAX_LINE_LENGTH];
