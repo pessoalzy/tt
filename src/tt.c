@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <time.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -23,6 +24,9 @@ int main(int argc, char *argv[])
         int lc, bad, good, space;
         FILE *fp;
         char *test;
+
+        time_t start_time, end_time;
+
         test = (char *) malloc(81);
 
         fp=fopen(argv[1], "r");
@@ -41,6 +45,9 @@ int main(int argc, char *argv[])
         start_color();
         init_pair(1, COLOR_RED, COLOR_BLACK);
 
+        /* get the current time */
+        time(&start_time);
+
         bad = 0;
         good = 0;
         space = 0;
@@ -56,15 +63,18 @@ int main(int argc, char *argv[])
                                 move(1,j + 1);
                                 addch(' ');
                                 move(1,j + 1);
+                                time(&end_time);
                         }
                         else if (ch == buf[i][j]) {
                                 addch(ch);
+                                time(&end_time);
                                 if (ch != ' ')
                                         good++;
                                 else
                                         space++;
                         }
                         else {
+                                time(&end_time);
                                 attron(COLOR_PAIR(1));
                                 addch(ch);
                                 attroff(COLOR_PAIR(1));
@@ -82,6 +92,11 @@ int main(int argc, char *argv[])
 
 end:
         endwin();
-        printf("%d mistakes, %d total characters, %d total (normalized, 5 character) words, %d total spaces\n", bad, good - bad, (good - bad)/5, space);
+        /* printf("%d mistakes, %d total characters, %d total (normalized, 5 character) words, %d total spaces\n", bad, good - bad, (good - bad)/5, space); */
+        /* printf("%d seconds spent typing \n", end_time - start_time); */
+        float total_words = ((good - bad) / 5.0);
+        float total_minutes = ((end_time - start_time) / 60.0);
+        printf("%f total words, %f total minutes\n", total_words, total_minutes);
+        printf("%f WPM\n", (total_words / total_minutes));
         return 0;
 }
