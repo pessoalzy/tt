@@ -1,2 +1,2 @@
 plainassmake:
-	tcc -Wextra -lncurses -g src/tt.c -o bin/tt
+	tcc -Wextra -lncurses -g tt.c -o tt
