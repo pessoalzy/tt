@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
         int lc, bad, good, space;
         FILE *fp;
         char *test;
+        float total_words, total_minutes;
 
         time_t start_time, end_time;
 
@@ -47,6 +48,10 @@ int main(int argc, char *argv[])
 
         /* get the current time */
         time(&start_time);
+
+        move(3,73);
+        printw("--- WPM\n");
+        move(0,0);
 
         bad = 0;
         good = 0;
@@ -87,6 +92,16 @@ int main(int argc, char *argv[])
                 move(1,0);
                 for (int j = 0; j <= 80; j++)
                         addch(' ');
+                move(3,0);
+                for (int j = 0; j <= 80; j++)
+                        addch(' ');
+
+                total_words = ((good - bad) / 5.0);
+                total_minutes = ((end_time - start_time) / 60.0);
+
+                move(3,73);
+                printw("%3.0f WPM\n", (total_words / total_minutes));
+
                 move(0,0);
         }
 
@@ -94,8 +109,6 @@ end:
         endwin();
         /* printf("%d mistakes, %d total characters, %d total (normalized, 5 character) words, %d total spaces\n", bad, good - bad, (good - bad)/5, space); */
         /* printf("%d seconds spent typing \n", end_time - start_time); */
-        float total_words = ((good - bad) / 5.0);
-        float total_minutes = ((end_time - start_time) / 60.0);
         printf("%f total words, %f total minutes\n", total_words, total_minutes);
         printf("%f WPM\n", (total_words / total_minutes));
         return 0;
