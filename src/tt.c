@@ -21,14 +21,13 @@
 int main(int argc, char *argv[])
 {
         char buf[MAX_LINES][MAX_LINE_LENGTH];
+        char line_to_check[MAX_LINE_LENGTH];
         int lc, bad, good, space;
         FILE *fp;
-        char *test;
         float total_words, total_minutes;
 
         time_t start_time, end_time;
 
-        test = (char *) malloc(81);
 
         fp=fopen(argv[1], "r");
 
@@ -59,33 +58,51 @@ int main(int argc, char *argv[])
         for(int i = 0; i < lc; i++) {
                 printw("%s\n", buf[i]);
                 int ch;
-                for (int j = 0; j < (int)strlen(buf[i]); j++) {
-                       ch = getch();
-                       if (ch == KEY_F(4))
-                               goto end;
-                       else if (ch == KEY_BACKSPACE) {
-                                j = j - 2;
-                                move(1,j + 1);
+
+                /* until the line to check matches the buf lets keep going */
+                int j = 0;
+                while (strcmp(line_to_check, buf[i])) {
+                        
+                        /* get the input char */
+                        ch = getch();
+
+                        /* quit if F4 is pressed */
+                        if (ch == KEY_F(4))
+                                goto end;
+                        /* if backspace is pressed, and we're not at the start of the line */
+                        else if (ch == KEY_BACKSPACE && j > 0) {
+                                j--;
+                                move(1, j);
                                 addch(' ');
-                                move(1,j + 1);
+                                move(1, j);
                                 time(&end_time);
+                                line_to_check[j] = '\0';
                         }
                         else if (ch == buf[i][j]) {
                                 addch(ch);
+                                line_to_check[j] = ch;
+                                /* always add null just in case we are at the end of the line */
+                                line_to_check[j + 1] = '\0';
                                 time(&end_time);
-                                if (ch != ' ')
-                                        good++;
-                                else
-                                        space++;
+                                j++;
                         }
                         else {
-                                time(&end_time);
                                 attron(COLOR_PAIR(1));
                                 addch(ch);
+                                line_to_check[j] = ch;
+                                line_to_check[j + 1] = '\0';
                                 attroff(COLOR_PAIR(1));
-                                bad++;
+                                j++;
                         }
                 }
+
+                /* check total number of non space characters in the line */
+                for (int k = 0; k < (int)strlen(line_to_check); k++) {
+                        if(line_to_check[k] != ' ')
+                                good++;
+                }
+
+                time(&end_time);
                 move(0,0);
                 for (int j = 0; j <= 80; j++)
                         addch(' ');
@@ -96,7 +113,7 @@ int main(int argc, char *argv[])
                 for (int j = 0; j <= 80; j++)
                         addch(' ');
 
-                total_words = ((good - bad) / 5.0);
+                total_words = (good / 5.0);
                 total_minutes = ((end_time - start_time) / 60.0);
 
                 move(3,73);
@@ -107,9 +124,5 @@ int main(int argc, char *argv[])
 
 end:
         endwin();
-        /* printf("%d mistakes, %d total characters, %d total (normalized, 5 character) words, %d total spaces\n", bad, good - bad, (good - bad)/5, space); */
-        /* printf("%d seconds spent typing \n", end_time - start_time); */
-        printf("%f total words, %f total minutes\n", total_words, total_minutes);
-        printf("%f WPM\n", (total_words / total_minutes));
         return 0;
 }
