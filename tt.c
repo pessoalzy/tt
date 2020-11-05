@@ -38,10 +38,20 @@ int main(int argc, char *argv[])
         /*--------------------------------------------------------------------*/
         /* initialize ncurses screen and interface                            */
         /*--------------------------------------------------------------------*/
+
         initscr();
 	raw();
 	keypad(stdscr, TRUE);
         noecho();
+        {
+                int x, y;
+                getmaxyx(stdscr, y, x);
+                if (y < 24 && x < 80) {
+                        printf("Terminal too small, 80x24 required\n");
+                        return 1;
+                }
+        }
+
         start_color();
         init_pair(1, COLOR_RED, COLOR_BLACK);
         init_pair(2, COLOR_GREEN, COLOR_BLACK);
