@@ -17,11 +17,15 @@ int main(int argc, char *argv[])
         time_t start_time, end_time;
 
 
+        /* TODO check for non ascii characters, or non-ascii encoded files */
         /* open the file, load its lines into an array of strings, close file */
-        /* error handling */
         {
                 FILE *fp;
                 fp=fopen(argv[1], "r");
+                if (fp == NULL) {
+                        printf("Bad or missing file\n");
+                        return 1;
+                }
                 buf_lines = 0;
                 while (fgets(buf[buf_lines], MAX_LINE_LENGTH + 1, fp) &&
                                 buf_lines < MAX_LINES - 1) {
@@ -71,7 +75,6 @@ int main(int argc, char *argv[])
                                 endwin();
                                 return 0;
                         }
-
                         /* if backspace is pressed,
                          * and we're not at the start of the line */
                         else if (ch == KEY_BACKSPACE && input_index > 0) {
@@ -82,6 +85,10 @@ int main(int argc, char *argv[])
                                 time(&end_time);
                                 input_string[input_index] = '\0';
                         }
+                        /* if the key isnt F4 or BACKSPACE, and its outside of
+                         * this range, then it is an invalid key */
+                        else if ((ch < 32) || (ch > 126))
+                                ;
                         /* input character is correct */
                         else if (ch == buf[buf_index][input_index]) {
                                 attron(COLOR_PAIR(2));
@@ -94,12 +101,6 @@ int main(int argc, char *argv[])
                                 input_index++;
                                 attroff(COLOR_PAIR(2));
                         }
-
-                        /* TODO account for special key presses, etc,
-                         * perhaps check if char is between 32 and 126
-                         * perhaps allow arrow keys but that would be more work.
-                         */
-
                         /* input character is incorrect */
                         else {
                                 attron(COLOR_PAIR(1));
