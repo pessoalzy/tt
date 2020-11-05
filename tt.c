@@ -16,7 +16,9 @@ int main(int argc, char *argv[])
         float typed_word_count, total_minutes;
         time_t start_time, end_time;
 
+        /*--------------------------------------------------------------------*/
         /* open the file, load its lines into an array of strings, close file */
+        /*--------------------------------------------------------------------*/
         {
                 FILE *fp;
                 fp=fopen(argv[1], "r");
@@ -33,7 +35,9 @@ int main(int argc, char *argv[])
                 fclose(fp);
         }
 
-        /* start ncurses screen */
+        /*--------------------------------------------------------------------*/
+        /* initialize ncurses screen and interface                            */
+        /*--------------------------------------------------------------------*/
         initscr();
 	raw();
 	keypad(stdscr, TRUE);
@@ -49,8 +53,9 @@ int main(int argc, char *argv[])
         printw("--- WPM\n");
         move(0, 0);
 
-        /* get the start time */
-        time(&start_time);
+        /*--------------------------------------------------------------------*/
+        /* main loop                                                          */
+        /*--------------------------------------------------------------------*/
 
         typed_char_count = 0;
         /* loop this for every line that has been loaded into the buffer */
@@ -58,6 +63,10 @@ int main(int argc, char *argv[])
                 int input_index;
                 /* print the current line from the file */
                 printw("%s\n", buf[buf_index]);
+
+                /*------------------------------------------------------------*/
+                /* input loop                                                 */
+                /*------------------------------------------------------------*/
 
                 input_index = 0;
                 /* until the input string matches the buffer string, do not
@@ -67,6 +76,10 @@ int main(int argc, char *argv[])
                         
                         /* get the input char */
                         ch = getch();
+
+                        /* get start time when first key is pressed */
+                        if (buf_index == 0 && input_index == 0)
+                                time(&start_time);
 
                         /* quit if F4 is pressed */
                         if (ch == KEY_F(4)) {
@@ -119,6 +132,10 @@ int main(int argc, char *argv[])
                                 input_index++;
                         }
                 }
+
+                /*------------------------------------------------------------*/
+                /* get data for the completed line, and print it              */
+                /*------------------------------------------------------------*/
 
                 /* check total number of non-space characters in the line */
                 for (int i = 0; i < (int)strlen(input_string); i++) {
