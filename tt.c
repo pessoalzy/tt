@@ -12,8 +12,8 @@ int main(int argc, char *argv[])
 {
         char buf[MAX_LINES][MAX_LINE_LENGTH + 1];
         char input_string[MAX_LINE_LENGTH + 1];
-        int buf_lines, typed_char_count;
-        float typed_word_count, total_minutes;
+        int buf_lines, total_char_count;
+        float total_word_count, total_minutes;
         time_t start_time, end_time;
 
         /*--------------------------------------------------------------------*/
@@ -43,34 +43,50 @@ int main(int argc, char *argv[])
 	raw();
 	keypad(stdscr, TRUE);
         noecho();
+
         {
                 int x, y;
                 getmaxyx(stdscr, y, x);
                 if (y < 24 && x < 80) {
+                        endwin();
                         printf("Terminal too small, 80x24 required\n");
                         return 1;
                 }
         }
+
+	if (has_colors() == FALSE)
+	{	endwin();
+		printf("Your terminal does not support color\n");
+		return 1;
+	}
 
         start_color();
         init_pair(1, COLOR_RED, COLOR_BLACK);
         init_pair(2, COLOR_GREEN, COLOR_BLACK);
 
         /* add some initial information */
-        move(5, 0);
+        move(6, 0);
         printw("To quit press F4 at any time...");
-        move(3, MAX_LINE_LENGTH - 7);
-        printw("--- WPM\n");
+        move(3, MAX_LINE_LENGTH - 13);
+        printw("LAST: --- WPM\n");
+        move(4, MAX_LINE_LENGTH - 14);
+        printw("TOTAL: --- WPM\n");
         move(0, 0);
 
         /*--------------------------------------------------------------------*/
         /* main loop                                                          */
         /*--------------------------------------------------------------------*/
 
-        typed_char_count = 0;
+        total_char_count = 0;
         /* loop this for every line that has been loaded into the buffer */
         for(int buf_index = 0; buf_index < buf_lines; buf_index++) {
-                int input_index;
+                time_t line_start_time;
+                int line_char_count, input_index;
+                float line_word_count, line_minutes;
+
+                /* set initial position for printing to screen */
+                move(0, 0);
+
                 /* print the current line from the file */
                 printw("%s\n", buf[buf_index]);
 
@@ -79,6 +95,7 @@ int main(int argc, char *argv[])
                 /*------------------------------------------------------------*/
 
                 input_index = 0;
+                line_char_count = 0;
                 /* until the input string matches the buffer string, do not
                  * move on to the next one */
                 while (strcmp(input_string, buf[buf_index])) {
@@ -87,9 +104,12 @@ int main(int argc, char *argv[])
                         /* get the input char */
                         ch = getch();
 
-                        /* get start time when first key is pressed */
+                        /* get line/total start times when first key is
+                         * pressed */
                         if (buf_index == 0 && input_index == 0)
                                 time(&start_time);
+                        if (input_index == 0)
+                                time(&line_start_time);
 
                         /* quit if F4 is pressed */
                         if (ch == KEY_F(4)) {
@@ -144,35 +164,38 @@ int main(int argc, char *argv[])
                 }
 
                 /*------------------------------------------------------------*/
-                /* get data for the completed line, and print it              */
+                /* get WPM data for the completed lines, and print it         */
                 /*------------------------------------------------------------*/
 
                 /* check total number of non-space characters in the line */
                 for (int i = 0; i < (int)strlen(input_string); i++) {
-                        if(input_string[i] != ' ')
-                                typed_char_count++;
+                        if(input_string[i] != ' ') {
+                                line_char_count++;
+                                total_char_count++;
+                        }
                 }
 
-                /* check the end time after each line */
+                /* reset the end time after each line */
                 time(&end_time);
                 /* clear the screen for the next line */
                 for (int x = 0; x <= MAX_LINE_LENGTH ; x++) {
-                        for (int y = 0; y <= 3; y ++) {
+                        for (int y = 0; y <= 4; y ++) {
                                 move(y, x);
                                 addch(' ');
                         }
                 }
 
-                /* calculate total words typed, and ellapsed time since starting
-                 * the program */
-                typed_word_count = (typed_char_count / 5.0);
+                /* final calculations */
+                total_word_count = (total_char_count / 5.0);
                 total_minutes = ((end_time - start_time) / 60.0);
 
-                /* print the cumulative WPM since starting the program */
-                move(3, MAX_LINE_LENGTH - 7);
-                printw("%3.0f WPM\n", (typed_word_count / total_minutes));
+                line_word_count = (line_char_count / 5.0);
+                line_minutes = ((end_time - line_start_time) / 60.0);
 
-                /* reset position for next string */
-                move(0, 0);
+                move(3, MAX_LINE_LENGTH - 13);
+                printw("LAST: %3.0f WPM\n", (line_word_count / line_minutes));
+                move(4, MAX_LINE_LENGTH - 14);
+                printw("TOTAL: %3.0f WPM\n", (total_word_count / total_minutes));
+
         }
 }
