@@ -12,7 +12,7 @@ Installation
 Edit `config.mk` to match your local setup (list is installed into the
 /usr/local namespace by default).
 
-Afterwards enter the following command to build and install `list` (if
+Afterwards enter the following command to build and install `tt` (if
 necessary as root):
         
         make install
