@@ -16,11 +16,6 @@ int main(int argc, char *argv[])
         float typed_word_count, total_minutes;
         time_t start_time, end_time;
 
-
-        /* TODO check for non ascii characters, or non-ascii encoded files
-         * stop the input after it reaches the end of the string at the
-         * end of a line. audible/visual bell when the user hits a bad key?
-         * if they try to type past the last line? */
         /* open the file, load its lines into an array of strings, close file */
         {
                 FILE *fp;
@@ -94,31 +89,38 @@ int main(int argc, char *argv[])
                                 ;
                         /* input character is correct */
                         else if (ch == buf[buf_index][input_index]) {
-                                attron(COLOR_PAIR(2));
-                                addch(ch);
-                                input_string[input_index] = ch;
-                                /* always add null after the current position
-                                 * just in case we are at the end of the line */
-                                input_string[input_index + 1] = '\0';
-                                time(&end_time);
-                                input_index++;
-                                attroff(COLOR_PAIR(2));
+                                /* make sure there is room in the buffer */
+                                if (input_index < MAX_LINE_LENGTH) {
+                                        attron(COLOR_PAIR(2));
+                                        addch(ch);
+                                        input_string[input_index] = ch;
+                                        /* always add null after the current
+                                         * position just in case we are at the
+                                         * end of the line */
+                                        input_string[input_index + 1] = '\0';
+                                        time(&end_time);
+                                        input_index++;
+                                        attroff(COLOR_PAIR(2));
+                                }
                         }
                         /* input character is incorrect */
                         else {
-                                attron(COLOR_PAIR(1));
-                                /* put a red period in places where space is
-                                 * incorrectly placed, so that it is clear
-                                 * that it is an error */
-                                if (ch == ' ')
-                                        addch('_');
-                                else
-                                        addch(ch);
+                                /* make sure there is room in the buffer */
+                                if (input_index < MAX_LINE_LENGTH) {
+                                        attron(COLOR_PAIR(1));
+                                        /* put a red period in places where
+                                         * space is incorrectly placed, so that
+                                         * it is clear that it is an error */
+                                        if (ch == ' ')
+                                                addch('_');
+                                        else
+                                                addch(ch);
 
-                                input_string[input_index] = ch;
-                                input_string[input_index + 1] = '\0';
-                                attroff(COLOR_PAIR(1));
-                                input_index++;
+                                        input_string[input_index] = ch;
+                                        input_string[input_index + 1] = '\0';
+                                        attroff(COLOR_PAIR(1));
+                                        input_index++;
+                                }
                         }
                 }
 
