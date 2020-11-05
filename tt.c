@@ -17,7 +17,10 @@ int main(int argc, char *argv[])
         time_t start_time, end_time;
 
 
-        /* TODO check for non ascii characters, or non-ascii encoded files */
+        /* TODO check for non ascii characters, or non-ascii encoded files
+         * stop the input after it reaches the end of the string at the
+         * end of a line. audible/visual bell when the user hits a bad key?
+         * if they try to type past the last line? */
         /* open the file, load its lines into an array of strings, close file */
         {
                 FILE *fp;
