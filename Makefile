@@ -1,3 +1,6 @@
+# tt - typing timer/tuor/test
+# see LICENSE file for copyright and license details.
+
 include config.mk
 
 normal:
