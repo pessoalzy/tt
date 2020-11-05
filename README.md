@@ -7,6 +7,16 @@ Requirements
 ------------
 In order to build `tt` you need ncurses.
 
+Installation
+------------
+Edit `config.mk` to match your local setup (list is installed into the
+/usr/local namespace by default).
+
+Afterwards enter the following command to build and install `list` (if
+necessary as root):
+        
+        make install
+
 Running tt
 ----------
 Running `tt` requires a formatted text document to work correctly. The document
