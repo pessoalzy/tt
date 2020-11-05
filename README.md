@@ -5,7 +5,7 @@ typing speed using ASCII documents provided by the user.
 
 Requirements
 ------------
-In order to build tt you need the ncurses.
+In order to build tt you need ncurses.
 
 Running tt
 ----------
