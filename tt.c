@@ -87,40 +87,36 @@ int main(int argc, char *argv[])
                          * this range, then it is an invalid key */
                         else if ((ch < 32) || (ch > 126))
                                 ;
-                        /* input character is correct */
-                        else if (ch == buf[buf_index][input_index]) {
-                                /* make sure there is room in the buffer */
-                                if (input_index < MAX_LINE_LENGTH) {
-                                        attron(COLOR_PAIR(2));
-                                        addch(ch);
-                                        input_string[input_index] = ch;
-                                        /* always add null after the current
-                                         * position just in case we are at the
-                                         * end of the line */
-                                        input_string[input_index + 1] = '\0';
-                                        time(&end_time);
-                                        input_index++;
-                                        attroff(COLOR_PAIR(2));
-                                }
+                        /* input character is correct, and there is room in the
+                         * input buffer */
+                        else if (ch == buf[buf_index][input_index] &&
+                                        (input_index < MAX_LINE_LENGTH)) {
+                                attron(COLOR_PAIR(2));
+                                addch(ch);
+                                input_string[input_index] = ch;
+                                /* always add null after the current position
+                                 * just in case we are at the end of the line */
+                                input_string[input_index + 1] = '\0';
+                                time(&end_time);
+                                input_index++;
+                                attroff(COLOR_PAIR(2));
                         }
-                        /* input character is incorrect */
-                        else {
-                                /* make sure there is room in the buffer */
-                                if (input_index < MAX_LINE_LENGTH) {
-                                        attron(COLOR_PAIR(1));
-                                        /* put a red period in places where
-                                         * space is incorrectly placed, so that
-                                         * it is clear that it is an error */
-                                        if (ch == ' ')
-                                                addch('_');
-                                        else
-                                                addch(ch);
+                        /* input character is incorrect and there is room in the
+                         * input buffer */
+                        else if (input_index < MAX_LINE_LENGTH) {
+                                attron(COLOR_PAIR(1));
+                                /* put a red period in places where space is
+                                 * incorrectly placed, so that it is clear that
+                                 * it is an error */
+                                if (ch == ' ')
+                                        addch('_');
+                                else
+                                        addch(ch);
 
-                                        input_string[input_index] = ch;
-                                        input_string[input_index + 1] = '\0';
-                                        attroff(COLOR_PAIR(1));
-                                        input_index++;
-                                }
+                                input_string[input_index] = ch;
+                                input_string[input_index + 1] = '\0';
+                                attroff(COLOR_PAIR(1));
+                                input_index++;
                         }
                 }
 
