@@ -1,4 +1,4 @@
-# tt - typing timer/tuor/test
+# tt - typing timer/tutor/test
 # see LICENSE file for copyright and license details.
 
 include config.mk
