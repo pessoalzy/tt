@@ -9,7 +9,7 @@ In order to build `tt` you need ncurses.
 
 Installation
 ------------
-Edit `config.mk` to match your local setup (list is installed into the
+Edit `config.mk` to match your local setup (`tt` is installed into the
 /usr/local namespace by default).
 
 Afterwards enter the following command to build and install `tt` (if
