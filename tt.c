@@ -118,9 +118,12 @@ int main(int argc, char *argv[])
                                 endwin();
                                 return 0;
                         }
-                        /* if backspace is pressed,
-                         * and we're not at the start of the line */
-                        else if (ch == KEY_BACKSPACE && input_index > 0) {
+                        /* if backspace is pressed, * and we're not at the start
+                         * of the line.
+                         * ch == 8 accounts for backspace being pressed while
+                         * caps lock is on */
+                        else if (((ch == KEY_BACKSPACE) || (ch == 8)) &&
+                                        (input_index > 0)) {
                                 input_index--;
                                 move(1, input_index);
                                 addch(' ');
