@@ -24,6 +24,7 @@ must be encoded with ASCII and have lines of 80 or fewer characters in length
 with no blank lines.
 
 here is the oneliner that I use:
+
         iconv -f utf-8 -t ascii//translit foo.txt | sed 's/--/-/g' \
                 | sed '/^$/d' | sed 's/^[ \t]*//' > bar.txt
 
