@@ -30,4 +30,4 @@ here is the oneliner that I use:
 
 Usage
 -----
-        tt /path/to/ascii/file.txt
+    tt /path/to/ascii/file.txt
