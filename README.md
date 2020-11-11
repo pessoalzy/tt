@@ -15,7 +15,7 @@ Edit `config.mk` to match your local setup (`tt` is installed into the
 Afterwards enter the following command to build and install `tt` (if
 necessary as root):
         
-        make install
+    make install
 
 Running tt
 ----------
@@ -25,8 +25,8 @@ with no blank lines.
 
 here is the oneliner that I use:
 
-        iconv -f utf-8 -t ascii//translit foo.txt | sed 's/--/-/g' \
-                | sed '/^$/d' | sed 's/^[ \t]*//' > bar.txt
+    iconv -f utf-8 -t ascii//translit foo.txt | sed 's/--/-/g' \
+            | sed '/^$/d' | sed 's/^[ \t]*//' > bar.txt
 
 Usage
 -----
