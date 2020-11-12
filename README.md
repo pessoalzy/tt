@@ -3,6 +3,8 @@ tt - typing timer/tutor/test
 `tt` is an extremely basic tool for practicing touch typing, and monitoring your
 typing speed using ASCII documents provided by the user.
 
+![tt demo](https://raw.githubusercontent.com/runrin/tt/gh-pages/tt-demo.gif)
+
 Requirements
 ------------
 In order to build `tt` you need `ncurses`.
