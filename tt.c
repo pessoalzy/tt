@@ -201,6 +201,8 @@ int main(int argc, char *argv[])
                 printw("LAST: %3.0f WPM\n", (line_word_count / line_minutes));
                 move(4, MAX_LINE_LENGTH - 14);
                 printw("TOTAL: %3.0f WPM\n", (total_word_count / total_minutes));
-
         }
+        /* end ncurses screen, and exit if all lines in file have been typed */
+        endwin();
+        return 0;
 }
