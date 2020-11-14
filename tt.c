@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 {
         char buf[MAX_LINES][MAX_LINE_LENGTH + 1];
         char input_string[MAX_LINE_LENGTH + 1];
-        int buf_lines, total_char_count;
+        int buf_lines, total_char_count, bad_char_count;
         float total_word_count, total_minutes;
         time_t start_time, end_time;
 
@@ -76,6 +76,7 @@ int main(int argc, char *argv[])
         /*--------------------------------------------------------------------*/
 
         total_char_count = 0;
+        bad_char_count = 0;
         /* loop this for every line that has been loaded into the buffer */
         for(int buf_index = 0; buf_index < buf_lines; buf_index++) {
                 time_t line_start_time;
@@ -109,8 +110,10 @@ int main(int argc, char *argv[])
                         /* quit if F4 is pressed */
                         if (ch == KEY_F(4)) {
                                 endwin();
-                                if (total_word_count && total_minutes)
-                                        printf("Average typing speed: %.0f WPM\n", (total_word_count / total_minutes));
+                                if (total_word_count && total_minutes) {
+                                        printf("     WPM: %.0f\n", (total_word_count / total_minutes));
+                                        printf("Accuracy: %.0f%%\n", ((((float)total_char_count/(total_char_count+bad_char_count)))*100));
+                                }
                                 return 0;
                         }
                         /* if backspace is pressed, * and we're not at the start
@@ -140,14 +143,14 @@ int main(int argc, char *argv[])
                                  * just in case we are at the end of the line */
                                 input_string[input_index + 1] = '\0';
                                 time(&end_time);
-                                input_index++;
                                 attroff(COLOR_PAIR(2));
+                                input_index++;
                         }
                         /* input character is incorrect and there is room in the
                          * input buffer */
                         else if (input_index < MAX_LINE_LENGTH) {
                                 attron(COLOR_PAIR(1));
-                                /* put a red period in places where space is
+                                /* put a red underscore in places where space is
                                  * incorrectly placed, so that it is clear that
                                  * it is an error */
                                 if (ch == ' ')
@@ -158,6 +161,7 @@ int main(int argc, char *argv[])
                                 input_string[input_index] = ch;
                                 input_string[input_index + 1] = '\0';
                                 attroff(COLOR_PAIR(1));
+                                bad_char_count++;
                                 input_index++;
                         }
                 }
@@ -196,6 +200,7 @@ int main(int argc, char *argv[])
 
         /* end ncurses screen, and exit if all lines in file have been typed */
         endwin();
-        printf("Average typing speed: %.0f WPM\n", (total_word_count / total_minutes));
+        printf("     WPM: %.0f\n", (total_word_count / total_minutes));
+        printf("Accuracy: %.0f%%\n", ((((float)total_char_count/(total_char_count+bad_char_count)))*100));
         return 0;
 }
