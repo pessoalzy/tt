@@ -109,6 +109,8 @@ int main(int argc, char *argv[])
                         /* quit if F4 is pressed */
                         if (ch == KEY_F(4)) {
                                 endwin();
+                                if (total_word_count && total_minutes)
+                                        printf("Average typing speed: %.0f WPM\n", (total_word_count / total_minutes));
                                 return 0;
                         }
                         /* if backspace is pressed, * and we're not at the start
@@ -194,5 +196,6 @@ int main(int argc, char *argv[])
 
         /* end ncurses screen, and exit if all lines in file have been typed */
         endwin();
+        printf("Average typing speed: %.0f WPM\n", (total_word_count / total_minutes));
         return 0;
 }
