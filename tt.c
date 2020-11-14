@@ -67,13 +67,9 @@ int main(int argc, char *argv[])
         init_pair(2, COLOR_GREEN, COLOR_BLACK);
 
         /* add some initial information */
-        move(6, 0);
-        printw("To quit press F4 at any time...");
-        move(3, MAX_LINE_LENGTH - 13);
-        printw("LAST: --- WPM\n");
-        move(4, MAX_LINE_LENGTH - 14);
-        printw("TOTAL: --- WPM\n");
-        move(0, 0);
+        mvprintw(6, 0, "To quit press F4 at any time...");
+        mvprintw(3, MAX_LINE_LENGTH - 13, "LAST: --- WPM\n");
+        mvprintw(4, MAX_LINE_LENGTH - 14, "TOTAL: --- WPM\n");
 
         /*--------------------------------------------------------------------*/
         /* main loop                                                          */
@@ -86,11 +82,8 @@ int main(int argc, char *argv[])
                 int line_char_count, input_index;
                 float line_word_count, line_minutes;
 
-                /* set initial position for printing to screen */
-                move(0, 0);
-
                 /* print the current line from the file */
-                printw("%s\n", buf[buf_index]);
+                mvprintw(0, 0, "%s\n", buf[buf_index]);
 
                 /*------------------------------------------------------------*/
                 /* input loop                                                 */
@@ -125,8 +118,7 @@ int main(int argc, char *argv[])
                         else if (((ch == KEY_BACKSPACE) || (ch == 8)) &&
                                         (input_index > 0)) {
                                 input_index--;
-                                move(1, input_index);
-                                addch(' ');
+                                mvaddch(1, input_index, ' ');
                                 move(1, input_index);
                                 time(&end_time);
                                 input_string[input_index] = '\0';
@@ -185,8 +177,7 @@ int main(int argc, char *argv[])
                 /* clear the screen for the next line */
                 for (int x = 0; x <= MAX_LINE_LENGTH ; x++) {
                         for (int y = 0; y <= 4; y ++) {
-                                move(y, x);
-                                addch(' ');
+                                mvaddch(y, x, ' ');
                         }
                 }
 
@@ -197,11 +188,10 @@ int main(int argc, char *argv[])
                 line_word_count = (line_char_count / 5.0);
                 line_minutes = ((end_time - line_start_time) / 60.0);
 
-                move(3, MAX_LINE_LENGTH - 13);
-                printw("LAST: %3.0f WPM\n", (line_word_count / line_minutes));
-                move(4, MAX_LINE_LENGTH - 14);
-                printw("TOTAL: %3.0f WPM\n", (total_word_count / total_minutes));
+                mvprintw(3, MAX_LINE_LENGTH - 13, "LAST: %3.0f WPM\n", (line_word_count / line_minutes));
+                mvprintw(4, MAX_LINE_LENGTH - 14, "TOTAL: %3.0f WPM\n", (total_word_count / total_minutes));
         }
+
         /* end ncurses screen, and exit if all lines in file have been typed */
         endwin();
         return 0;
