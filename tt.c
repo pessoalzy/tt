@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
                          * of the line.
                          * ch == 8 accounts for backspace being pressed while
                          * caps lock is on */
-                        else if (((ch == KEY_BACKSPACE) || (ch == 8)) &&
+                        else if (((ch == KEY_BACKSPACE) || (ch == 8) || (ch == 127) || (ch == 263)) &&
                                         (input_index > 0)) {
                                 input_index--;
                                 mvaddch(1, input_index, ' ');
