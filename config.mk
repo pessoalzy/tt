@@ -5,6 +5,6 @@ PREFIX = /usr/local
 INC = -lncurses
 
 #flags
-CFLAGS = -pedantic -Wall -Wno-deprecated-declarations
+CFLAGS = -pedantic -Wall -Wno-deprecated-declarations -std=c99
 
 CC = gcc
