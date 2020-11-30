@@ -4,7 +4,7 @@
 include config.mk
 
 normal:
-	${CC} ${CFLAGS} ${INC} tt.c -o tt
+	${CC} ${CFLAGS} tt.c -o tt ${INC}
 
 install: normal
 	cp tt ${PREFIX}/bin
