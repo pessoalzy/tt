@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
         {
                 int x, y;
                 getmaxyx(stdscr, y, x);
-                if (y < 24 && x < 80) {
+                if (y < 24 || x < 80) {
                         endwin();
                         printf("Terminal too small, 80x24 required\n");
                         return 1;
